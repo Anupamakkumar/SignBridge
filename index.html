@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123c48">
+  <title>SignBridge — Communication without barriers</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="topbar">
+    <div class="brand-mark" aria-hidden="true">SB</div>
+    <div class="brand-copy"><strong>SignBridge</strong><span>Communication without barriers</span></div>
+    <button id="contrastToggle" class="button button-quiet" type="button" aria-pressed="false">High contrast</button>
+  </header>
+
+  <main id="main" class="page">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">ACCESSIBLE COMMUNICATION TOOLKIT</p>
+        <h1>Make conversations easier.</h1>
+        <p class="hero-text">Use live captions, typed replies, spoken text, and ready-made phrases to communicate in everyday situations.</p>
+      </div>
+      <div class="hero-badge" aria-hidden="true"><span>Aa</span><span>↔</span><span>◖))</span></div>
+    </section>
+
+    <div class="notice" role="note">
+      <strong>Privacy first:</strong> SignBridge does not save your conversations to a server. Browser speech recognition may send audio to the browser provider depending on your browser and settings. Use a trusted device and avoid sharing sensitive information.
+    </div>
+
+    <nav class="tabs" aria-label="Communication tools">
+      <button class="tab active" data-panel="livePanel" aria-selected="true">Live captions</button>
+      <button class="tab" data-panel="replyPanel" aria-selected="false">Type & speak</button>
+      <button class="tab" data-panel="phrasesPanel" aria-selected="false">Quick phrases</button>
+      <button class="tab" data-panel="guidePanel" aria-selected="false">Help & guide</button>
+    </nav>
+
+    <section id="livePanel" class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">SPEECH → TEXT</p><h2>Live captions</h2><p class="muted">Captions appear here when someone speaks near your microphone.</p></div>
+        <span id="speechSupport" class="status-pill">Checking browser…</span>
+      </div>
+      <div class="controls-row">
+        <label class="field-label" for="languageSelect">Speech language
+          <select id="languageSelect">
+            <option value="en-IN">English (India)</option>
+            <option value="ml-IN">Malayalam</option>
+            <option value="en-US">English (US)</option>
+            <option value="hi-IN">Hindi</option>
+            <option value="ta-IN">Tamil</option>
+          </select>
+        </label>
+        <button id="startListening" class="button button-primary" type="button">Start listening</button>
+        <button id="stopListening" class="button button-secondary" type="button" disabled>Stop</button>
+        <button id="clearCaptions" class="button button-quiet" type="button">Clear captions</button>
+      </div>
+      <p id="listeningStatus" class="status-line" aria-live="polite">Microphone is off.</p>
+      <div class="caption-box" aria-live="polite" aria-atomic="false">
+        <p id="interimCaption" class="interim">Your live words will appear here…</p>
+        <div id="finalCaptions" class="final-captions"></div>
+      </div>
+      <p class="helper-text">Tip: choose the speaker's language before starting. Accuracy depends on the browser, microphone, accent, noise, and selected language.</p>
+    </section>
+
+    <section id="replyPanel" class="panel hidden">
+      <p class="eyebrow">TEXT → SPEECH</p><h2>Type a reply and speak it aloud</h2>
+      <p class="muted">Show the text to the other person, or use speech synthesis to read it aloud.</p>
+      <label class="field-label" for="replyText">Your message</label>
+      <textarea id="replyText" rows="5" maxlength="1200" placeholder="Type your reply here…"></textarea>
+      <div class="controls-row">
+        <label class="field-label" for="voiceLanguage">Voice language
+          <select id="voiceLanguage">
+            <option value="en-IN">English (India)</option>
+            <option value="ml-IN">Malayalam</option>
+            <option value="en-US">English (US)</option>
+            <option value="hi-IN">Hindi</option>
+            <option value="ta-IN">Tamil</option>
+          </select>
+        </label>
+        <button id="speakReply" class="button button-primary" type="button">Speak message</button>
+        <button id="stopSpeaking" class="button button-secondary" type="button">Stop speaking</button>
+        <button id="clearReply" class="button button-quiet" type="button">Clear</button>
+      </div>
+      <div class="show-message"><span class="eyebrow">SHOW THIS TO THE OTHER PERSON</span><p id="largeReply">Your typed message will appear in large text here.</p></div>
+      <p id="speechOutputStatus" class="status-line" aria-live="polite"></p>
+    </section>
+
+    <section id="phrasesPanel" class="panel hidden">
+      <p class="eyebrow">READY-MADE MESSAGES</p><h2>Quick phrases</h2>
+      <p class="muted">Tap a phrase to place it in the message box. You can then display it or speak it.</p>
+      <div id="phraseCategories" class="phrase-categories">
+        {% for category in phrases.keys() %}
+        <button class="category-button {% if loop.first %}selected{% endif %}" data-category="{{ category }}">{{ category }}</button>
+        {% endfor %}
+      </div>
+      <div id="phraseGrid" class="phrase-grid">
+        {% for phrase in phrases.values()|first %}
+        <button class="phrase-card" data-phrase="{{ phrase }}">{{ phrase }} <span aria-hidden="true">＋</span></button>
+        {% endfor %}
+      </div>
+      <p class="helper-text">For emergencies, contact local emergency services directly when possible. This app does not dispatch help or send your location.</p>
+    </section>
+
+    <section id="guidePanel" class="panel hidden">
+      <p class="eyebrow">GETTING STARTED</p><h2>How to use SignBridge</h2>
+      <div class="guide-grid">
+        <article><span class="guide-number">01</span><h3>Listen</h3><p>Open Live captions, select the spoken language, allow microphone access, and press Start listening.</p></article>
+        <article><span class="guide-number">02</span><h3>Reply</h3><p>Open Type & speak, type your response, then show the screen or select Speak message.</p></article>
+        <article><span class="guide-number">03</span><h3>Use phrases</h3><p>Choose a category and select a ready-made message for common situations.</p></article>
+      </div>
+      <div class="notice warning"><strong>Important limitation:</strong> This first version does not translate sign language or recognize signing from a camera. It supports speech-to-text and typed-text-to-speech, which are different capabilities. It is not a substitute for a qualified interpreter in medical, legal, or other high-stakes situations.</div>
+      <h3>Browser support</h3>
+      <p>Live speech recognition works best in a supported browser such as a current desktop version of Google Chrome. Some browsers do not support the Web Speech Recognition API. Text-to-speech support varies by device and installed voices.</p>
+    </section>
+
+    <footer class="footer"><span>SignBridge · Accessible communication toolkit</span><span>Keyboard-friendly · Responsive · No account required</span></footer>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
